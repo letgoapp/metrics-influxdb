@@ -9,7 +9,8 @@ plugins {
 
 group = "com.github.davidb"
 def description = "A reporter for metrics which announces measurements to an InfluxDB server."
-version = "git describe --always --dirty".execute().text.trim()
+//version = "git describe --always --dirty".execute().text.trim()
+version = "0.9.4"
 println("version : '${version}'")
 
 repositories {
@@ -17,7 +18,7 @@ repositories {
 }
 
 dependencies {
-	provided 'io.dropwizard.metrics:metrics-core:3.1.2'
+	provided 'io.dropwizard.metrics:metrics-core:3.2.5'
 	compile 'org.slf4j:slf4j-api:1.7.7'
 
 	testCompile 'junit:junit:4.4'
@@ -29,8 +30,8 @@ dependencies {
 	testCompile 'com.google.guava:guava:19.0'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 test {
 	// enable TestNG support (default is JUnit)
@@ -81,6 +82,18 @@ def pomConfig = {
 }
 
 publishing {
+
+	repositories {
+        maven {
+            name 'libs-releases-local'
+            url 'http://artifactory.bi.letgo.aws/artifactory/libs-release-local'
+            credentials {
+                username "$mavenUser"
+                password "$mavenPassword"
+            }
+        }
+	}
+
 	publications {
 		mavenStuff(MavenPublication) {
 			from components.java
